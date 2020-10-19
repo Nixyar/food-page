@@ -1,9 +1,12 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tabBlockItems = document.querySelector('.tabheader__items'),
+    const body = document.querySelector("body"),
+        tabBlockItems = document.querySelector('.tabheader__items'),
         tabContent = document.querySelectorAll('.tabcontent'),
         tabItem = document.querySelectorAll('.tabheader__item');
+
+    body.style.width = '100%';
 
     function hideContentTabs() {
         tabContent.forEach((evt) => {
@@ -36,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         }
     });
+
+    // TIMER
 
     let timer;
 
@@ -112,4 +117,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateTimer();
     getDate();
+
+    // POPUP
+
+    const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
+        popup = document.querySelector('.modal'),
+        closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
+
+    function closePopup() {
+        body.style.position = 'relative';
+        popup.classList.add('hide');
+        popup.classList.remove('show');
+    }
+
+    openPopupItem.forEach((item) => {
+        item.addEventListener('click', () => {
+            body.style.position = 'fixed';
+            popup.classList.add('show');
+            popup.classList.remove('hide');
+        });
+    });
+
+    closePopupItem.forEach((item) => {
+        item.addEventListener('click', () => {
+            closePopup();
+        });
+    });
+
+    popup.addEventListener('click', (evt) => {
+        if (evt.target.classList.contains('modal')) {
+            closePopup();
+        }
+    });
+
+    document.addEventListener('keydown', (evt) => {
+        if (evt.code === 'Escape' && popup.classList.contains('show')) {
+            closePopup();
+        }
+    });
 });
