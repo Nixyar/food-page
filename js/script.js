@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     body.style.width = '100%';
 
+    // TABS
+
     function hideContentTabs() {
         tabContent.forEach((evt) => {
             evt.classList.add('hide');
@@ -124,17 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
         popup = document.querySelector('.modal'),
         closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
 
+    function openPopup() {
+        body.style.overflow = 'hidden';
+        popup.classList.add('show');
+        popup.classList.remove('hide');
+    }
+
     function closePopup() {
-        body.style.position = 'relative';
+        body.style.overflow = 'auto';
         popup.classList.add('hide');
         popup.classList.remove('show');
     }
 
     openPopupItem.forEach((item) => {
         item.addEventListener('click', () => {
-            body.style.position = 'fixed';
-            popup.classList.add('show');
-            popup.classList.remove('hide');
+            openPopup();
         });
     });
 
@@ -155,4 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
             closePopup();
         }
     });
+
+    const timerPopup = setTimeout(openPopup, 5000);
+
+    function scrollPopup() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openPopup();
+            window.removeEventListener('scroll', scrollPopup);
+        }
+    }
+
+    window.addEventListener('scroll', scrollPopup);
 });
