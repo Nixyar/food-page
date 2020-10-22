@@ -175,19 +175,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CONSTRUCTOR MENU
 
-    const menuImg = document.querySelectorAll('[data-imgMenu="1"]'),
-        menuTitles = document.querySelectorAll('.menu__item-subtitle'),
-        menuDescr = document.querySelectorAll('.menu__item-descr'),
-        menuPrice = document.querySelectorAll('.menu__item-total span');
-
     class Menu {
-        constructor(src, alt, title, description, price, parentSelector) {
+        constructor(src, alt, title, description, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.description = description;
             this.price = price;
             this.parent = document.querySelector(parentSelector);
+            this.classes = classes;
             this.transfer = 27;
             this.changeToUAH();
         }
@@ -198,8 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         render() {
             const element = document.createElement('div');
+
+            if (this.classes.length === 0) {
+                element.classList.add('menu__item');
+            } else {
+                this.classes.forEach(item => {
+                    element.classList.add(item);
+                });
+            }
+
             element.innerHTML = `
-            <div class="menu__item">
                     <img data-imgMenu="1" src=${this.src} alt=${this.alt}>
                     <h3 class="menu__item-subtitle">${this.title}</h3>
                     <div class="menu__item-descr">${this.description}</div>
@@ -208,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="menu__item-cost">Цена:</div>
                         <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
                     </div>
-                </div>
             `;
             this.parent.append(element);
         }
@@ -225,21 +228,21 @@ document.addEventListener('DOMContentLoaded', () => {
         '.menu .container').render();
 
     new Menu(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Меню "Премиум"',
-        `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.
-         Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-        14,
-        '.menu .container').render();
-
-    new Menu(
         'img/tabs/post.jpg',
         'post',
         'Меню “Постное”',
         `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие 
                         продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество
                         белков за счет тофу и импортных вегетарианских стейков.`,
+        14,
+        '.menu .container').render();
+
+    new Menu(
+        'img/tabs/elite.jpg',
+        'elite',
+        'Меню "Премиум"',
+        `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.
+         Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
         21,
         '.menu .container').render();
 });
