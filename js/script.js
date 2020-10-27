@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let timer;
 
-    const endDateTime = new Date('2020-11-18');
+    const endDateTime = new Date('2020-12-01');
 
     document.querySelector('#promoDate').innerHTML = `${endDateTime.getDay()} ${getMonthName()} ${endDateTime.getFullYear()}`;
 
@@ -213,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
                     </div>
             `;
+
             this.parent.append(element);
         }
     }
@@ -225,7 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
     больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой 
     и высоким качеством!`,
         9,
-        '.menu .container').render();
+        '.menu .container'
+    ).render();
 
     new Menu(
         'img/tabs/post.jpg',
@@ -235,7 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество
                         белков за счет тофу и импортных вегетарианских стейков.`,
         14,
-        '.menu .container').render();
+        '.menu .container'
+    ).render();
 
     new Menu(
         'img/tabs/elite.jpg',
@@ -244,5 +247,66 @@ document.addEventListener('DOMContentLoaded', () => {
         `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.
          Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
         21,
-        '.menu .container').render();
+        '.menu .container'
+    ).render();
+
+    // SEND FORM
+
+    const message = {
+        complete: 'Спасибо за заявку. Мы свяжемся с вами в ближайшее время!',
+        loading: 'Загрузка',
+        fail: 'Произошла ошибка. Повторите попытку позже.'
+    };
+
+    const form = document.querySelectorAll('form');
+
+    function postData(form) {
+        const statusMessage = document.createElement('div');
+        statusMessage.classList.add('status-form');
+
+        form.append(statusMessage);
+
+        form.addEventListener('submit', evt => {
+            evt.preventDefault();
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+
+            request.setRequestHeader('Content-type', 'application/json');
+
+            const formBuild = new FormData(form);
+
+            // JSON PARSE
+
+            const obj = {};
+
+            formBuild.forEach(function (value, key) {
+                obj[key] = value;
+            });
+            const json = JSON.stringify(obj);
+
+            request.send(json);
+            // END JSON PARSE
+            // request.send(formBuild);
+
+            statusMessage.textContent = message.loading;
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.complete;
+                    form.reset();
+                    setTimeout(() => {
+                        statusMessage.textContent = '';
+                    }, 3000)
+                } else {
+                    statusMessage.textContent = message.fail;
+                }
+            });
+        })
+    }
+
+    form.forEach(item => {
+        postData(item);
+    });
 });
