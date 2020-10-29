@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // TABS
 
     function hideContentTabs() {
-        tabContent.forEach((evt) => {
+        tabContent.forEach(evt => {
             evt.classList.add('hide');
         });
 
-        tabItem.forEach((evt) => {
+        tabItem.forEach(evt => {
             evt.classList.remove('tabheader__item_active')
         });
     }
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideContentTabs();
     showContentTabs();
 
-    tabBlockItems.addEventListener('click', (evt) => {
+    tabBlockItems.addEventListener('click', evt => {
         const target = evt.target;
 
         if (target && target.classList.contains('tabheader__item')) {
@@ -124,6 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
         popup = document.querySelector('.modal'),
+        btnForm = document.querySelectorAll('.btn_form'),
+        thanksContent = document.createElement('div'),
+        popupContent = document.querySelector('.modal__dialog'),
         closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
 
     function openPopup() {
@@ -136,33 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
         body.style.overflow = 'auto';
         popup.classList.add('hide');
         popup.classList.remove('show');
+        thanksContent.remove();
+        popupContent.classList.remove('hide');
     }
-
-    openPopupItem.forEach((item) => {
-        item.addEventListener('click', () => {
-            openPopup();
-        });
-    });
-
-    closePopupItem.forEach((item) => {
-        item.addEventListener('click', () => {
-            closePopup();
-        });
-    });
-
-    popup.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('modal')) {
-            closePopup();
-        }
-    });
-
-    document.addEventListener('keydown', (evt) => {
-        if (evt.code === 'Escape' && popup.classList.contains('show')) {
-            closePopup();
-        }
-    });
-
-    // const timerPopup = setTimeout(openPopup, 5000);
 
     function scrollPopup() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -171,7 +150,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function thanksModal(message) {
+        popupContent.classList.add('hide');
+        thanksContent.classList.add('modal__dialog');
+        thanksContent.style.textAlign = 'center';
+        thanksContent.innerHTML =
+            `
+                <div class="modal__content">
+                    <div data-popupClose="true" class="modal__close">&times;</div>
+                    <p>${message}</p>
+                </div>
+            `;
+
+        document.querySelector('.modal').append(thanksContent);
+
+        setTimeout(() => {
+            closePopup();
+            thanksContent.remove();
+            popupContent.classList.remove('hide');
+        }, 4000)
+    }
+
+    openPopupItem.forEach(item => {
+        item.addEventListener('click', () => {
+            openPopup();
+        });
+    });
+
+    closePopupItem.forEach(item => {
+        item.addEventListener('click', () => {
+            closePopup();
+        });
+    });
+
+    popup.addEventListener('click', evt => {
+        if (evt.target.classList.contains('modal')) {
+            closePopup();
+        }
+    });
+
+    document.addEventListener('keydown', evt => {
+        if (evt.code === 'Escape' && popup.classList.contains('show')) {
+            closePopup();
+        }
+    });
+
     window.addEventListener('scroll', scrollPopup);
+    setTimeout(openPopup, 50000);
 
     // CONSTRUCTOR MENU
 
@@ -254,20 +279,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const message = {
         complete: 'Спасибо за заявку. Мы свяжемся с вами в ближайшее время!',
-        loading: 'Загрузка',
+        loading: 'img/Spinner.svg',
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
 
     const form = document.querySelectorAll('form');
 
     function postData(form) {
-        const statusMessage = document.createElement('div');
-        statusMessage.classList.add('status-form');
-
-        form.append(statusMessage);
-
         form.addEventListener('submit', evt => {
             evt.preventDefault();
+
+            const statusMessage = document.createElement('img');
+
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText =
+                `
+                display: block;
+                margin: auto;
+               `;
+
+            form.append(statusMessage);
 
             const request = new XMLHttpRequest();
             request.open('POST', 'server.php');
@@ -287,20 +318,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             request.send(json);
             // END JSON PARSE
-            // request.send(formBuild);
-
-            statusMessage.textContent = message.loading;
 
             request.addEventListener('load', () => {
                 if (request.status === 200) {
                     console.log(request.response);
-                    statusMessage.textContent = message.complete;
+                    thanksModal(message.complete);
+                    statusMessage.remove();
                     form.reset();
-                    setTimeout(() => {
-                        statusMessage.textContent = '';
-                    }, 3000)
                 } else {
-                    statusMessage.textContent = message.fail;
+                    thanksModal(message.fail);
+                    statusMessage.remove();
                 }
             });
         })
