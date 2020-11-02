@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const message = {
         complete: 'Спасибо за заявку. Мы свяжемся с вами в ближайшее время!',
-        loading: 'img/Spinner.svg',
+        loading: 'icons/spinner.svg',
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
 
@@ -328,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     thanksModal(message.fail);
                     statusMessage.remove();
+                    form.reset();
                 }
             });
         })
