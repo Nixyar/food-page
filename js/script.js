@@ -290,47 +290,44 @@ document.addEventListener('DOMContentLoaded', () => {
             evt.preventDefault();
 
             const statusMessage = document.createElement('img');
-
             statusMessage.src = message.loading;
             statusMessage.style.cssText =
                 `
                 display: block;
                 margin: auto;
                `;
-
             form.append(statusMessage);
-
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
-
-            request.setRequestHeader('Content-type', 'application/json');
 
             const formBuild = new FormData(form);
 
             // JSON PARSE
-
             const obj = {};
-
             formBuild.forEach(function (value, key) {
                 obj[key] = value;
             });
-            const json = JSON.stringify(obj);
-
-            request.send(json);
             // END JSON PARSE
 
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    thanksModal(message.complete);
-                    statusMessage.remove();
-                    form.reset();
-                } else {
+            fetch('server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            })
+                .then(res => {
+                    res.text()
+                        .then(res => {
+                            console.log(res);
+                            thanksModal(message.complete);
+                        });
+                })
+                .catch(() => {
                     thanksModal(message.fail);
+                })
+                .finally(() => {
                     statusMessage.remove();
                     form.reset();
-                }
-            });
+                });
         })
     }
 
