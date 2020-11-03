@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             // END JSON PARSE
 
-            fetch('server.php', {
+            fetch('http://localhost:3000/requests', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -334,4 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
     form.forEach(item => {
         postData(item);
     });
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(data => console.log(data))
 });
