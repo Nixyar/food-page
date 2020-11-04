@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     axios.get(`${baseURL}/menu`)
         .then(data => {
-            console.log(data);
+            // console.log(data);
             data.data.forEach(({img, altimg, title, descr, price}) => {
                 new Menu(img, altimg, title, descr, price, '.menu .container').render();
             })
@@ -321,4 +321,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         })
     }
+
+    // SLIDER
+    let slideNumber = 0;
+
+    const slidersBlock = document.querySelectorAll('.offer__slide'),
+        prevSlide = document.querySelector('.offer__slider-prev'),
+        nextSlide = document.querySelector('.offer__slider-next'),
+        sliderCurrent = document.querySelector('#current'),
+        slidersTotal = document.querySelector('#total');
+
+    function initSlider() {
+        slidersBlock.forEach((item) => {
+            item.style.display = 'none';
+        });
+        sliderCurrent.innerHTML = `${addZero(slideNumber + 1)}`;
+        slidersTotal.innerHTML = `${addZero(slidersBlock.length)}`;
+        slidersBlock[slideNumber].style.display = 'block';
+        slidersBlock[slideNumber].classList.add('fade');
+    }
+
+    prevSlide.addEventListener('click', evt => {
+        evt.preventDefault();
+        slideNumber -= 1;
+        if (slideNumber < 0) {
+            slideNumber = 3;
+        }
+        initSlider();
+    });
+
+    nextSlide.addEventListener('click', evt => {
+        evt.preventDefault();
+        slideNumber += 1;
+        if (slideNumber > 3) {
+            slideNumber = 0;
+        }
+        initSlider();
+    });
+
+    initSlider();
 });
