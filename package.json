@@ -19,7 +19,9 @@
     "url": "https://github.com/Nixyar/food-page/issues"
   },
   "homepage": "https://github.com/Nixyar/food-page#readme",
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.21.0"
+  },
   "devDependencies": {
     "json-server": "^0.16.2"
   }

@@ -253,14 +253,22 @@ document.addEventListener('DOMContentLoaded', () => {
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
 
-    const getData = async url => {
-        const res = await fetch(url);
-        return await res.json();
-    };
+    // const getData = async url => {
+    //     const res = await fetch(url);
+    //     return await res.json();
+    // };
+    //
+    // getData(`${baseURL}/menu`)
+    //     .then(data => {
+    //         data.forEach(({img, altimg, title, descr, price}) => {
+    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
+    //         })
+    //     });
 
-    getData(`${baseURL}/menu`)
+    axios.get(`${baseURL}/menu`)
         .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => {
+            console.log(data);
+            data.data.forEach(({img, altimg, title, descr, price}) => {
                 new Menu(img, altimg, title, descr, price, '.menu .container').render();
             })
         });
