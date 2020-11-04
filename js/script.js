@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
         popup = document.querySelector('.modal'),
-        btnForm = document.querySelectorAll('.btn_form'),
         thanksContent = document.createElement('div'),
         popupContent = document.querySelector('.modal__dialog'),
         closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
@@ -243,39 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    new Menu(
-        'img/tabs/vegy.jpg',
-        'vegy',
-        'Меню "Фитнес"',
-        `Меню "Фитнес" - это новый подход к приготовлению блюд: 
-    больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой 
-    и высоким качеством!`,
-        9,
-        '.menu .container'
-    ).render();
-
-    new Menu(
-        'img/tabs/post.jpg',
-        'post',
-        'Меню “Постное”',
-        `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие 
-                        продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество
-                        белков за счет тофу и импортных вегетарианских стейков.`,
-        14,
-        '.menu .container'
-    ).render();
-
-    new Menu(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Меню "Премиум"',
-        `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд.
-         Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-        21,
-        '.menu .container'
-    ).render();
-
     // SEND FORM
+    const baseURL = 'http://localhost:3000';
+
+    const form = document.querySelectorAll('form');
 
     const message = {
         complete: 'Спасибо за заявку. Мы свяжемся с вами в ближайшее время!',
@@ -283,9 +253,37 @@ document.addEventListener('DOMContentLoaded', () => {
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
 
-    const form = document.querySelectorAll('form');
+    const getData = async url => {
+        const res = await fetch(url);
+        return await res.json();
+    };
 
-    function postData(form) {
+    getData(`${baseURL}/menu`)
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new Menu(img, altimg, title, descr, price, '.menu .container').render();
+            })
+        });
+
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+        if (!res.ok) {
+            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
+        }
+        return await res.json();
+    };
+
+    form.forEach(item => {
+        postDataForm(item);
+    });
+
+    function postDataForm(form) {
         form.addEventListener('submit', evt => {
             evt.preventDefault();
 
@@ -299,27 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
             form.append(statusMessage);
 
             const formBuild = new FormData(form);
+            const json = JSON.stringify(Object.fromEntries(formBuild.entries()));
 
-            // JSON PARSE
-            const obj = {};
-            formBuild.forEach(function (value, key) {
-                obj[key] = value;
-            });
-            // END JSON PARSE
-
-            fetch('http://localhost:3000/requests', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(obj)
-            })
+            postData(`${baseURL}/requests`, json)
                 .then(res => {
-                    res.text()
-                        .then(res => {
-                            console.log(res);
-                            thanksModal(message.complete);
-                        });
+                    console.log(res);
+                    thanksModal(message.complete);
                 })
                 .catch(() => {
                     thanksModal(message.fail);
@@ -330,12 +313,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         })
     }
-
-    form.forEach(item => {
-        postData(item);
-    });
-
-    fetch('http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(data => console.log(data))
 });
