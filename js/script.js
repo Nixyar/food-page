@@ -322,42 +322,93 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
-    // SLIDER
-    let slideNumber = 0;
+    // Easy SLIDER
+    // let slideNumber = 0;
+    //
+    // const slidersBlock = document.querySelectorAll('.offer__slide'),
+    //     prevSlide = document.querySelector('.offer__slider-prev'),
+    //     nextSlide = document.querySelector('.offer__slider-next'),
+    //     sliderCurrent = document.querySelector('#current'),
+    //     slidersTotal = document.querySelector('#total');
+    //
+    // slidersTotal.textContent = `${addZero(slidersBlock.length)}`;
+    //
+    // function initSlider() {
+    //     slidersBlock.forEach((item) => {
+    //         item.style.display = 'none';
+    //     });
+    //
+    //     if (slideNumber > 3) {
+    //         slideNumber = 0;
+    //     }
+    //
+    //     if (slideNumber < 0) {
+    //         slideNumber = 3;
+    //     }
+    //
+    //     sliderCurrent.textContent = `${addZero(slideNumber + 1)}`;
+    //     slidersBlock[slideNumber].style.display = 'block';
+    //     slidersBlock[slideNumber].classList.add('fade');
+    // }
+    //
+    // prevSlide.addEventListener('click', evt => {
+    //     evt.preventDefault();
+    //     slideNumber -= 1;
+    //     initSlider();
+    // });
+    //
+    // nextSlide.addEventListener('click', evt => {
+    //     evt.preventDefault();
+    //     slideNumber += 1;
+    //     initSlider();
+    // });
+    //
+    // initSlider();
 
-    const slidersBlock = document.querySelectorAll('.offer__slide'),
+    // Hard SLIDER
+    // let currentSlidersOnPage = 1;
+
+    let slideNumber = 0;
+    let offset = 0;
+
+    const sliders = document.querySelectorAll('.offer__slide'),
         prevSlide = document.querySelector('.offer__slider-prev'),
         nextSlide = document.querySelector('.offer__slider-next'),
+        sliderContainer = document.querySelector('.offer__slider-wrapper'),
+        slidersBlock = document.querySelector('.offer__slider-inner'),
         sliderCurrent = document.querySelector('#current'),
-        slidersTotal = document.querySelector('#total');
+        slidersTotal = document.querySelector('#total'),
+        sliderWidth = window.getComputedStyle(sliderContainer).width;
 
-    function initSlider() {
-        slidersBlock.forEach((item) => {
-            item.style.display = 'none';
-        });
-        sliderCurrent.innerHTML = `${addZero(slideNumber + 1)}`;
-        slidersTotal.innerHTML = `${addZero(slidersBlock.length)}`;
-        slidersBlock[slideNumber].style.display = 'block';
-        slidersBlock[slideNumber].classList.add('fade');
-    }
+    sliderContainer.style.width = sliderWidth;
+    sliderContainer.style.overflow = 'hidden';
+    slidersBlock.style.display = 'flex';
+    slidersBlock.style.width = 100 * sliders.length + '%';
+    slidersBlock.style.transition = '0.5s all';
+    slidersTotal.textContent = `${addZero(sliders.length)}`;
+    sliderCurrent.textContent = `${addZero(slideNumber + 1)}`;
 
-    prevSlide.addEventListener('click', evt => {
-        evt.preventDefault();
-        slideNumber -= 1;
-        if (slideNumber < 0) {
-            slideNumber = 3;
-        }
-        initSlider();
+    sliders.forEach(item => {
+        item.style.width = sliderWidth;
     });
 
-    nextSlide.addEventListener('click', evt => {
-        evt.preventDefault();
-        slideNumber += 1;
+    nextSlide.addEventListener('click', () => {
+        slideNumber++;
         if (slideNumber > 3) {
             slideNumber = 0;
         }
-        initSlider();
+        sliderCurrent.textContent = `${addZero(slideNumber + 1)}`;
+        offset =+ +sliderWidth.slice(0, sliderWidth.length - 2) * slideNumber;
+        slidersBlock.style.transform = `translateX(-${offset}px)`
     });
 
-    initSlider();
+    prevSlide.addEventListener('click', () => {
+        slideNumber--;
+        if (slideNumber < 0) {
+            slideNumber = 3;
+        }
+        sliderCurrent.textContent = `${addZero(slideNumber + 1)}`;
+        offset =- +sliderWidth.slice(0, sliderWidth.length - 2) * slideNumber;
+        slidersBlock.style.transform = `translateX(${offset}px)`
+    });
 });
