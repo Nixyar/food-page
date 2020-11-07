@@ -368,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hard SLIDER
     let slideNumber = 0;
     let offset = 0;
+    const regExpPx = /\D/g;
 
     const sliders = document.querySelectorAll('.offer__slide'),
         prevSlide = document.querySelector('.offer__slider-prev'),
@@ -404,6 +405,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dots.push(dot);
     }
 
+    function deleteNotDigits(arg) {
+        return arg.replace(regExpPx, '');
+    }
+
     function slideActive() {
         sliderCurrent.textContent = `${addZero(slideNumber + 1)}`;
         dots.forEach(dot => dot.style.opacity = '.5');
@@ -415,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (slideNumber > 3) {
             slideNumber = 0;
         }
-        offset = (+sliderWidth.slice(0, sliderWidth.length - 2) * slideNumber);
+        offset = deleteNotDigits(sliderWidth) * slideNumber;
         slidersBlock.style.transform = `translateX(-${offset}px)`;
         slideActive();
     });
@@ -425,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (slideNumber < 0) {
             slideNumber = 3;
         }
-        offset = -sliderWidth.slice(0, sliderWidth.length - 2) * slideNumber;
+        offset = -deleteNotDigits(sliderWidth) * slideNumber;
         slidersBlock.style.transform = `translateX(${offset}px)`;
         slideActive();
     });
@@ -434,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dot.addEventListener('click', evt => {
             const slideTo = evt.target.getAttribute('data-slide-to');
             slideNumber = +slideTo;
-            offset = -sliderWidth.slice(0, sliderWidth.length - 2) * slideTo;
+            offset = -deleteNotDigits(sliderWidth) * slideTo;
             slidersBlock.style.transform = `translateX(${offset}px)`;
             slideActive();
         })
