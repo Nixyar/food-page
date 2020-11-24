@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sex === 'female') {
             calculatorResultSpan.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * activity);
         } else {
-            calculatorResultSpan.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height)) - (5.7 * age) * activity);
+            calculatorResultSpan.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * activity);
         }
 
         if (!height || !weight || !age) {
@@ -486,6 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 target.classList.add('calculating__choose-item_active');
+                resultCalculator();
             });
         });
     }
