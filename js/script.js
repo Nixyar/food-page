@@ -446,4 +446,72 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     dots[0].style.opacity = '1';
+
+    // CALCULATOR
+    const calculatorResultSpan = document.querySelector('.calculating__result span');
+    let sex = 'female',
+        height,
+        weight,
+        age,
+        activity = 1.375;
+
+    function resultCalculator() {
+        if (sex === 'female') {
+            calculatorResultSpan.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * activity);
+        } else {
+            calculatorResultSpan.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height)) - (5.7 * age) * activity);
+        }
+
+        if (!height || !weight || !age) {
+            calculatorResultSpan.textContent = '____'
+        }
+    }
+
+    resultCalculator();
+
+    function changeCalculatorTab(blockElem) {
+        const elements = document.querySelectorAll(`${blockElem} div`);
+        elements.forEach(elem => {
+            elem.addEventListener('click', evt => {
+                const target = evt.target;
+
+                if (target.getAttribute('data-activity')) {
+                    activity = target.getAttribute('data-activity');
+                } else {
+                    sex = target.getAttribute('id');
+                }
+
+                elements.forEach(elem => {
+                    elem.classList.remove('calculating__choose-item_active');
+                });
+
+                target.classList.add('calculating__choose-item_active');
+            });
+        });
+    }
+
+    changeCalculatorTab('#gender');
+    changeCalculatorTab('.calculating__choose_big');
+    
+    function getInputValue(selector) {
+        const input = document.querySelector(selector);
+
+        input.addEventListener('input', () => {
+            switch (input.getAttribute('id')) {
+                case 'height' :
+                    height = +input.value;
+                    break;
+                case 'weight' :
+                    weight = +input.value;
+                    break;
+                case 'age' :
+                    age = +input.value;
+                    break;
+            }
+            resultCalculator();
+        });
+    }
+    getInputValue('#height');
+    getInputValue('#weight');
+    getInputValue('#age');
 });
