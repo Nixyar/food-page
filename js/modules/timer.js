@@ -1,7 +1,7 @@
 function timer() {
     let timer;
 
-    const endDateTime = new Date('2020-12-01');
+    const endDateTime = new Date('2021-01-01');
 
     document.querySelector('#promoDate').innerHTML = `${endDateTime.getDay()} ${getMonthName()} ${endDateTime.getFullYear()}`;
 

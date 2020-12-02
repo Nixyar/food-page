@@ -1,10 +1,9 @@
 function popup() {
-    // POPUP
-
     const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
         popup = document.querySelector('.modal'),
         thanksContent = document.createElement('div'),
         popupContent = document.querySelector('.modal__dialog'),
+        body = document.querySelector("body"),
         closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
 
     function openPopup() {

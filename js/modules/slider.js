@@ -82,6 +82,14 @@ function slider() {
         dots.push(dot);
     }
 
+    function addZero(num) {
+        if (num < 10) {
+            return `0${num}`
+        } else {
+            return num;
+        }
+    }
+
     function deleteNotDigits(arg) {
         return arg.replace(regExpPx, '');
     }

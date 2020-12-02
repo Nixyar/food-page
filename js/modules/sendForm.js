@@ -1,5 +1,4 @@
 function sendForm() {
-    // SEND FORM
     const baseURL = 'http://localhost:3000';
 
     const form = document.querySelectorAll('form');
@@ -9,26 +8,6 @@ function sendForm() {
         loading: 'icons/spinner.svg',
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
-
-    // const getData = async url => {
-    //     const res = await fetch(url);
-    //     return await res.json();
-    // };
-    //
-    // getData(`${baseURL}/menu`)
-    //     .then(data => {
-    //         data.forEach(({img, altimg, title, descr, price}) => {
-    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
-    //         })
-    //     });
-
-    axios.get(`${baseURL}/menu`)
-        .then(data => {
-            // console.log(data);
-            data.data.forEach(({img, altimg, title, descr, price}) => {
-                new Menu(img, altimg, title, descr, price, '.menu .container').render();
-            })
-        });
 
     const postData = async (url, data) => {
         const res = await fetch(url, {

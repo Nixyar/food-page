@@ -7,7 +7,6 @@
   \**********************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 108:0-14 */
 /***/ ((module) => {
 
 function calculator() {
@@ -128,7 +127,6 @@ module.exports = calculator;
   \*****************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 46:0-14 */
 /***/ ((module) => {
 
 function cards() {
@@ -174,6 +172,28 @@ function cards() {
             this.parent.append(element);
         }
     }
+
+    // const getData = async url => {
+    //     const res = await fetch(url);
+    //     return await res.json();
+    // };
+    //
+    // getData(`${baseURL}/menu`)
+    //     .then(data => {
+    //         data.forEach(({img, altimg, title, descr, price}) => {
+    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
+    //         })
+    //     });
+
+    const baseURL = 'http://localhost:3000';
+
+    axios.get(`${baseURL}/menu`)
+        .then(data => {
+            // console.log(data);
+            data.data.forEach(({img, altimg, title, descr, price}) => {
+                new Menu(img, altimg, title, descr, price, '.menu .container').render();
+            })
+        });
 }
 
 module.exports = cards;
@@ -187,16 +207,14 @@ module.exports = cards;
   \*****************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 80:0-14 */
 /***/ ((module) => {
 
 function popup() {
-    // POPUP
-
     const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
         popup = document.querySelector('.modal'),
         thanksContent = document.createElement('div'),
         popupContent = document.querySelector('.modal__dialog'),
+        body = document.querySelector("body"),
         closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
 
     function openPopup() {
@@ -280,11 +298,9 @@ module.exports = popup;
   \********************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 83:0-14 */
 /***/ ((module) => {
 
 function sendForm() {
-    // SEND FORM
     const baseURL = 'http://localhost:3000';
 
     const form = document.querySelectorAll('form');
@@ -294,26 +310,6 @@ function sendForm() {
         loading: 'icons/spinner.svg',
         fail: 'Произошла ошибка. Повторите попытку позже.'
     };
-
-    // const getData = async url => {
-    //     const res = await fetch(url);
-    //     return await res.json();
-    // };
-    //
-    // getData(`${baseURL}/menu`)
-    //     .then(data => {
-    //         data.forEach(({img, altimg, title, descr, price}) => {
-    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
-    //         })
-    //     });
-
-    axios.get(`${baseURL}/menu`)
-        .then(data => {
-            // console.log(data);
-            data.data.forEach(({img, altimg, title, descr, price}) => {
-                new Menu(img, altimg, title, descr, price, '.menu .container').render();
-            })
-        });
 
     const postData = async (url, data) => {
         const res = await fetch(url, {
@@ -376,7 +372,6 @@ module.exports = sendForm;
   \******************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 128:0-14 */
 /***/ ((module) => {
 
 function slider() {
@@ -463,6 +458,14 @@ function slider() {
         dots.push(dot);
     }
 
+    function addZero(num) {
+        if (num < 10) {
+            return `0${num}`
+        } else {
+            return num;
+        }
+    }
+
     function deleteNotDigits(arg) {
         return arg.replace(regExpPx, '');
     }
@@ -517,7 +520,6 @@ module.exports = slider;
   \****************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 42:0-14 */
 /***/ ((module) => {
 
 function tabs() {
@@ -578,7 +580,7 @@ module.exports = tabs;
 function timer() {
     let timer;
 
-    const endDateTime = new Date('2020-12-01');
+    const endDateTime = new Date('2021-01-01');
 
     document.querySelector('#promoDate').innerHTML = `${endDateTime.getDay()} ${getMonthName()} ${endDateTime.getFullYear()}`;
 
@@ -685,14 +687,11 @@ module.exports = timer;
 /******/ 	
 /************************************************************************/
 (() => {
-"use strict";
 /*!**********************!*\
   !*** ./js/script.js ***!
   \**********************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: __webpack_require__ */
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const calculator = __webpack_require__(/*! ./modules/calculator */ "./js/modules/calculator.js"),
         cards = __webpack_require__(/*! ./modules/cards */ "./js/modules/cards.js"),

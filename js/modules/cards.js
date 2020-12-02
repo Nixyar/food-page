@@ -41,6 +41,28 @@ function cards() {
             this.parent.append(element);
         }
     }
+
+    // const getData = async url => {
+    //     const res = await fetch(url);
+    //     return await res.json();
+    // };
+    //
+    // getData(`${baseURL}/menu`)
+    //     .then(data => {
+    //         data.forEach(({img, altimg, title, descr, price}) => {
+    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
+    //         })
+    //     });
+
+    const baseURL = 'http://localhost:3000';
+
+    axios.get(`${baseURL}/menu`)
+        .then(data => {
+            // console.log(data);
+            data.data.forEach(({img, altimg, title, descr, price}) => {
+                new Menu(img, altimg, title, descr, price, '.menu .container').render();
+            })
+        });
 }
 
 module.exports = cards;
