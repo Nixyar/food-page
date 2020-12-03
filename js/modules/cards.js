@@ -1,4 +1,6 @@
-function cards() {
+import {getData} from '../services/services';
+
+function cards(baseURL) {
     class Menu {
         constructor(src, alt, title, description, price, parentSelector, ...classes) {
             this.src = src;
@@ -42,27 +44,20 @@ function cards() {
         }
     }
 
-    // const getData = async url => {
-    //     const res = await fetch(url);
-    //     return await res.json();
-    // };
-    //
-    // getData(`${baseURL}/menu`)
-    //     .then(data => {
-    //         data.forEach(({img, altimg, title, descr, price}) => {
-    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
-    //         })
-    //     });
-
-    const baseURL = 'http://localhost:3000';
-
-    axios.get(`${baseURL}/menu`)
+    getData(`${baseURL}/menu`)
         .then(data => {
-            // console.log(data);
-            data.data.forEach(({img, altimg, title, descr, price}) => {
+            data.forEach(({img, altimg, title, descr, price}) => {
                 new Menu(img, altimg, title, descr, price, '.menu .container').render();
             })
         });
+
+
+    // axios.get(`${baseURL}/menu`)
+    //     .then(data => {
+    //         data.data.forEach(({img, altimg, title, descr, price}) => {
+    //             new Menu(img, altimg, title, descr, price, '.menu .container').render();
+    //         })
+    //     });
 }
 
-module.exports = cards;
+export default cards;

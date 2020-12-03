@@ -1,26 +1,14 @@
-function sendForm() {
-    const baseURL = 'http://localhost:3000';
+import {closePopup} from './popup';
+import {postData} from '../services/services';
 
-    const form = document.querySelectorAll('form');
+function sendForm(baseURL, formSelector, modalDialog) {
+    const form = document.querySelectorAll(formSelector),
+        thanksContent = document.createElement('div');
 
     const message = {
         complete: 'Спасибо за заявку. Мы свяжемся с вами в ближайшее время!',
         loading: 'icons/spinner.svg',
         fail: 'Произошла ошибка. Повторите попытку позже.'
-    };
-
-    const postData = async (url, data) => {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: data
-        });
-        if (!res.ok) {
-            throw new Error(`Couldn't fetch ${url}, status: ${res.status}`);
-        }
-        return await res.json();
     };
 
     form.forEach(item => {
@@ -57,6 +45,20 @@ function sendForm() {
                 });
         })
     }
+
+    function thanksModal(message) {
+        document.querySelector('.form-popup').classList.add('hide');
+        thanksContent.style.textAlign = 'center';
+        thanksContent.innerHTML = `<h2>${message}</h2>`;
+
+        document.querySelector('.modal__content').append(thanksContent);
+
+        setTimeout(() => {
+            closePopup();
+            thanksContent.remove();
+            document.querySelector('.form-popup').classList.remove('hide');
+        }, 3000)
+    }
 }
 
-module.exports = sendForm;
+export default sendForm;

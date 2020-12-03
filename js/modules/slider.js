@@ -1,4 +1,12 @@
-function slider() {
+function slider({
+                    sliderContainerSelector,
+                    slidersSelector,
+                    slidersBlockSelector,
+                    nextSlideSelector,
+                    prevSlideSelector,
+                    currentSlideSelector,
+                    totalSlideSelector
+}) {
     // Easy SLIDER
     // let slideNumber = 0;
     //
@@ -47,13 +55,13 @@ function slider() {
     let offset = 0;
     const regExpPx = /\D/g;
 
-    const sliders = document.querySelectorAll('.offer__slide'),
-        prevSlide = document.querySelector('.offer__slider-prev'),
-        nextSlide = document.querySelector('.offer__slider-next'),
-        sliderContainer = document.querySelector('.offer__slider-wrapper'),
-        slidersBlock = document.querySelector('.offer__slider-inner'),
-        sliderCurrent = document.querySelector('#current'),
-        slidersTotal = document.querySelector('#total'),
+    const sliders = document.querySelectorAll(slidersSelector),
+        prevSlide = document.querySelector(prevSlideSelector),
+        nextSlide = document.querySelector(nextSlideSelector),
+        sliderContainer = document.querySelector(sliderContainerSelector),
+        slidersBlock = document.querySelector(slidersBlockSelector),
+        sliderCurrent = document.querySelector(currentSlideSelector),
+        slidersTotal = document.querySelector(totalSlideSelector),
         sliderWidth = window.getComputedStyle(sliderContainer).width;
 
     const paginationBlock = document.createElement('ol'),
@@ -133,4 +141,4 @@ function slider() {
     dots[0].style.opacity = '1';
 }
 
-module.exports = slider;
+export default slider;

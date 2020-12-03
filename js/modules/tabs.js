@@ -1,8 +1,8 @@
-function tabs() {
+function tabs(tabContentSelector, tabBlockItemsSelector, tabItemSelector, tabActiveClass) {
     const body = document.querySelector("body"),
-        tabBlockItems = document.querySelector('.tabheader__items'),
-        tabContent = document.querySelectorAll('.tabcontent'),
-        tabItem = document.querySelectorAll('.tabheader__item');
+        tabBlockItems = document.querySelector(tabBlockItemsSelector),
+        tabContent = document.querySelectorAll(tabContentSelector),
+        tabItem = document.querySelectorAll(tabItemSelector);
 
     body.style.width = '100%';
 
@@ -12,14 +12,14 @@ function tabs() {
         });
 
         tabItem.forEach(evt => {
-            evt.classList.remove('tabheader__item_active')
+            evt.classList.remove(tabActiveClass)
         });
     }
 
     function showContentTabs(i = 0) {
         tabContent[i].classList.add('show', 'fade');
         tabContent[i].classList.remove('hide');
-        tabItem[i].classList.add('tabheader__item_active')
+        tabItem[i].classList.add(tabActiveClass)
     }
 
     hideContentTabs();
@@ -39,4 +39,4 @@ function tabs() {
     });
 }
 
-module.exports = tabs;
+export default tabs;

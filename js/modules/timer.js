@@ -1,8 +1,4 @@
-function timer() {
-    let timer;
-
-    const endDateTime = new Date('2021-01-01');
-
+function timer(timer, endDateTime) {
     document.querySelector('#promoDate').innerHTML = `${endDateTime.getDay()} ${getMonthName()} ${endDateTime.getFullYear()}`;
 
     const days = document.querySelector('#days');
@@ -76,4 +72,4 @@ function timer() {
     getDate();
 }
 
-module.exports = timer;
+export default timer;

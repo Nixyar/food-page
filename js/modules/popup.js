@@ -1,24 +1,15 @@
-function popup() {
-    const openPopupItem = document.querySelectorAll('[data-popupOpen="true"]'),
-        popup = document.querySelector('.modal'),
-        thanksContent = document.createElement('div'),
-        popupContent = document.querySelector('.modal__dialog'),
-        body = document.querySelector("body"),
-        closePopupItem = document.querySelectorAll('[data-popupClose="true"]');
+function closePopup(modalDialog) {
+    const popup = document.querySelector('.modal'),
+        body = document.querySelector('body');
 
-    function openPopup() {
-        body.style.overflow = 'hidden';
-        popup.classList.add('show');
-        popup.classList.remove('hide');
-    }
+    body.style.overflow = 'auto';
+    popup.classList.add('hide');
+    popup.classList.remove('show');
+}
 
-    function closePopup() {
-        body.style.overflow = 'auto';
-        popup.classList.add('hide');
-        popup.classList.remove('show');
-        thanksContent.remove();
-        popupContent.classList.remove('hide');
-    }
+function popup(modalDialog) {
+    const popup = document.querySelector('.modal'),
+        body = document.querySelector('body');
 
     function scrollPopup() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -27,34 +18,20 @@ function popup() {
         }
     }
 
-    function thanksModal(message) {
-        popupContent.classList.add('hide');
-        thanksContent.classList.add('modal__dialog');
-        thanksContent.style.textAlign = 'center';
-        thanksContent.innerHTML =
-            `
-                <div class="modal__content">
-                    <div data-popupClose="true" class="modal__close">&times;</div>
-                    <p>${message}</p>
-                </div>
-            `;
-
-        document.querySelector('.modal').append(thanksContent);
-
-        setTimeout(() => {
-            closePopup();
-            thanksContent.remove();
-            popupContent.classList.remove('hide');
-        }, 4000)
+    function openPopup() {
+        body.style.overflow = 'hidden';
+        popup.classList.add('show');
+        popup.classList.remove('hide');
+        clearTimeout(timer);
     }
 
-    openPopupItem.forEach(item => {
+    document.querySelectorAll('[data-popupOpen="true"]').forEach(item => {
         item.addEventListener('click', () => {
             openPopup();
         });
     });
 
-    closePopupItem.forEach(item => {
+    document.querySelectorAll(`${modalDialog} .modal__close`).forEach(item => {
         item.addEventListener('click', () => {
             closePopup();
         });
@@ -73,7 +50,8 @@ function popup() {
     });
 
     window.addEventListener('scroll', scrollPopup);
-    setTimeout(openPopup, 50000);
+    let timer = setTimeout(openPopup, 400000);
 }
 
-module.exports = popup;
+export default popup;
+export {closePopup};

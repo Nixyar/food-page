@@ -1,5 +1,5 @@
-function calculator() {
-    const calculatorResultSpan = document.querySelector('.calculating__result span');
+function calculator(calculatorResultSelector) {
+    const calculatorResultSpan = document.querySelector(calculatorResultSelector);
     let sex,
         height,
         weight,
@@ -105,4 +105,4 @@ function calculator() {
     getInputValue('#age');
 }
 
-module.exports = calculator;
+export default calculator;
