@@ -1,3 +1,5 @@
+import 'promise-polyfill/src/polyfill';
+
 import calculator from './modules/calculator';
 import cards from './modules/cards';
 import popup from './modules/popup';
@@ -21,7 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSlideSelector: '#current',
         totalSlideSelector: '#total',
     });
-    tabs('.tabcontent', '.tabheader__items', '.tabheader__item', 'tabheader__item_active');
+    tabs({
+        tabContentSelector: '.tabcontent',
+        tabBlockItemsSelector: '.tabheader__items',
+        tabItemSelector: '.tabheader__item',
+        tabActiveClass: 'tabheader__item_active'
+    });
     timer(timer, new Date('2021-01-01'));
     sendForm(baseURL, 'form', '.modal__dialog');
 });
