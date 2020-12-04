@@ -1,4 +1,4 @@
-function tabs(tabContentSelector, tabBlockItemsSelector, tabItemSelector, tabActiveClass) {
+function tabs({tabContentSelector, tabBlockItemsSelector, tabItemSelector, tabActiveClass}) {
     const body = document.querySelector("body"),
         tabBlockItems = document.querySelector(tabBlockItemsSelector),
         tabContent = document.querySelectorAll(tabContentSelector),
